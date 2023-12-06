@@ -1,5 +1,11 @@
 # VFR AIP Charts
 
+## Dependencies
+
+```
+pip install 'aiohttp[speedups]' beautifulsoup4 pillow
+```
+
 ## URL examples
 
 ### Index
