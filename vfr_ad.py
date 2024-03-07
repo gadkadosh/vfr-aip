@@ -10,8 +10,8 @@ from io import BytesIO
 
 OUTPUT_DIR = "output"
 BYOP_DIR = f"{OUTPUT_DIR}/byop"
-BASE_URL = "https://aip.dfs.de/BasicVFR/2023NOV22/chapter"
-INDEX_PAGE = f"{BASE_URL}/344b4b4a595a3a801450b6ad348bc7b3.html"
+BASE_URL = "https://aip.dfs.de/BasicVFR/2024MAR07/chapter"
+INDEX_PAGE = f"{BASE_URL}/dc740af5fe2e7014197f8b8433ff6926.html"
 PRINT_URL = "https://aip.dfs.de/basicVFR/print/AD"
 
 LINK_SELECTOR = "a.folder-link[href]"
@@ -19,9 +19,6 @@ NAME_SELECTOR = 'span.folder-name[lang="en"]'
 
 
 async def save_doc(session, url: str, name: str):
-    if name.startswith("AD"):
-        return
-
     filename = name.replace(" ", "_VFR-AIP_", 1)
 
     headers = {"Referer": url}
@@ -52,10 +49,10 @@ async def main():
 
         for folder in folders[3:]:
             folder_url = BASE_URL + "/" + folder.attrs.get("href")
-            async with session.get(folder_url) as folder_reponse:
-                if not folder_reponse.ok:
+            async with session.get(folder_url) as folder_response:
+                if not folder_response.ok:
                     continue
-                folder_html = await folder_reponse.text()
+                folder_html = await folder_response.text()
             folder_soup = BeautifulSoup(folder_html, "html.parser")
             airfields = folder_soup.find_all("a", class_="folder-link")
 
@@ -70,11 +67,22 @@ async def main():
                 docs = airfield_soup.find_all("li", class_="document-item")
 
                 doc_tasks = []
+                airfield_name = airfield.find("span", lang="en").get_text().split()[-1]
+
                 for doc in docs:
                     href = doc.find("a").attrs.get("href")
                     name = doc.find("span", lang="en").get_text()
                     folder_url = PRINT_URL + href.replace("../pages", "")
-                    task = asyncio.ensure_future(save_doc(session, folder_url, name))
+                    if name.startswith("AD"):
+                        task = asyncio.ensure_future(
+                            save_doc(
+                                session, folder_url, airfield_name + "_VFR-AIP_Info"
+                            )
+                        )
+                    else:
+                        task = asyncio.ensure_future(
+                            save_doc(session, folder_url, name)
+                        )
                     doc_tasks.append(task)
                 await asyncio.gather(*doc_tasks)
 
