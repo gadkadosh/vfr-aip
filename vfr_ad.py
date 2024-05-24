@@ -7,11 +7,10 @@ import base64
 from PIL import Image
 from io import BytesIO
 
-
 OUTPUT_DIR = "output"
 BYOP_DIR = f"{OUTPUT_DIR}/byop"
-BASE_URL = "https://aip.dfs.de/BasicVFR/2024MAR07/chapter"
-INDEX_PAGE = f"{BASE_URL}/dc740af5fe2e7014197f8b8433ff6926.html"
+BASE_URL = "https://aip.dfs.de/BasicVFR/2024MAY02/chapter"
+INDEX_PAGE = f"{BASE_URL}/bcf79b9bd57f090e5f1cb64f4bf50bb5.html"
 PRINT_URL = "https://aip.dfs.de/basicVFR/print/AD"
 
 LINK_SELECTOR = "a.folder-link[href]"

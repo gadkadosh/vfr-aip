@@ -7,8 +7,8 @@ from io import BytesIO
 from pathlib import Path
 import os
 
-BASE_URL = "https://aip.dfs.de/BasicVFR/2024MAR07/chapter"
-INDEX_PAGE = f"{BASE_URL}/3244a398014823f13ace4090907c74e3.html"
+BASE_URL = "https://aip.dfs.de/BasicVFR/2024MAY02/chapter"
+INDEX_PAGE = f"{BASE_URL}/bcf79b9bd57f090e5f1cb64f4bf50bb5.html"
 PRINT_URL = "https://aip.dfs.de/basicVFR/print"
 FILENAME = "VFR_AIP.pdf"
 
